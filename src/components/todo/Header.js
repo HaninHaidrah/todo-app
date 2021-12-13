@@ -1,21 +1,24 @@
 import React from "react";
+import {Navbar,Button,Alignment} from "@blueprintjs/core"
 
 export default function Header() {
   return (
     <>
-      <ul class="nav justify-content-center">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            To Do
-          </a>
-        </li>
-       
-      </ul>
+     <>
+      <nav className="bp3-navbar .modifier bp3-dark" >
+        <div className="bp3-navbar-group bp3-align-left">
+          <div className="bp3-navbar-heading">TO-DO</div>
+          
+        </div>
+        <div className="bp3-navbar-group bp3-align-right">
+          <button className="bp3-button bp3-minimal bp3-icon-home">Home</button>
+          <span className="bp3-navbar-divider"></span>
+          <button className="bp3-button bp3-minimal bp3-icon-user"></button>
+          <button className="bp3-button bp3-minimal bp3-icon-notifications"></button>
+          <button className="bp3-button bp3-minimal bp3-icon-cog"></button>
+        </div>
+      </nav>
+    </>
     </>
   );
 }

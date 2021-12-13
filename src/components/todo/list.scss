@@ -1,0 +1,44 @@
+.paginationBttns {
+  width: 80%;
+  height: 40px;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.paginationBttns a {
+  padding: 10px;
+  margin: 8px;
+  border-radius: 5px;
+  border: 1px solid #008075;
+  color: #461111;
+  cursor: pointer;
+}
+
+.paginationBttns a:hover {
+  color: white;
+  background-color: #FFFCDC;
+}
+
+.paginationActive a {
+  color: #461111;
+  background-color: FFFCDC;
+}
+
+.paginationDisabled a {
+  color: grey;
+  background-color: #461111;
+}
+
+.cardDiv {
+  background-color: #F0D290;
+  width: 100%;
+  padding: 3%;
+
+}
+.div-flex1 {
+  width: 700px;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+}
