@@ -1,5 +1,5 @@
 import React from "react";
-import './form.scss';
+import "./form.scss";
 
 import { FormGroup, Card, Elevation, Button } from "@blueprintjs/core";
 export default function Form(props) {
@@ -7,7 +7,11 @@ export default function Form(props) {
     <>
       <div className="div-flex">
         <div className="toDo">
-          <Card interactive={true} elevation={Elevation.TWO}  className="formCard">
+          <Card
+            interactive={true}
+            elevation={Elevation.TWO}
+            className="formCard"
+          >
             <form onSubmit={props.handleSubmit}>
               <h2>Add To Do Item</h2>
               <FormGroup label="To Do Item" labelFor="text-input">
@@ -46,7 +50,7 @@ export default function Form(props) {
 
               <br />
               <label>
-                <Button type="submit">Add Item</Button>
+                <Button type="submit" id="buttID" >Add Item</Button>
               </label>
             </form>
           </Card>

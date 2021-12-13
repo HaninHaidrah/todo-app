@@ -68,7 +68,7 @@
 import React, { useContext, useState } from "react";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import ReactPaginate from "react-paginate";
-import { SettingsContext } from "./contex";
+import { SettingsContext } from "../contex/contex";
 import './list.scss'
 function List(props) {
   const settings = useContext(SettingsContext);

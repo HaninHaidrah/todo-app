@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useForm from "../../hook/form";
-import Form from "./form";
-import List from "./list";
+import Form from "./Form/form";
+import List from "./List/list";
+import Header from "./Header"
+import './todo.scss'
 
 import { v4 as uuid } from "uuid";
 
@@ -41,19 +43,22 @@ const ToDo = () => {
 
   return (
     <>
+    <Header />
       <header style={{ width: "1000px", margin: "0 auto" }}>
         <nav
           className="bp3-navbar .modifier "
-          style={{ color: "white", backgroundColor: "#040303" }}
+          style={{ color: "white", backgroundColor: "#4C3F91" }}
         >
-          <h1>To Do List: ({incomplete})</h1>
+          <h2>To Do List: ({incomplete})</h2>
         </nav>
       </header>
-
+      <div className="container">
       <Form handleSubmit={handleSubmit} handleChange={handleChange} />
 
       <List list={list} toggleComplete={toggleComplete} />
+      </div>
     </>
+
   );
 };
 
