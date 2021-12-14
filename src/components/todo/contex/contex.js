@@ -1,20 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 
-
-export const SettingsContext=React.createContext()
+export const SettingsContext = React.createContext();
 function Settings(props) {
-   const state ={
-    display :false,
-    numOfItems:3,
-    defaultSort:'item'
-   }
-    return (
-        <>
-           < SettingsContext.Provider value={state}>
-                {props.children}
-            </SettingsContext.Provider>
-        </>
-    )
+  let [numOfItems, setNum] = useState(3);
+  let[display,setDisplay]=useState(false)
+
+const handleChangeNum=(value)=>{
+    setNum(value)
+    console.log(value,"valuennnnnnnnnn");
+}
+  useEffect(()=>{
+  let data=JSON.parse(localStorage.getItem('configStting')) 
+  if(data){
+    handleChangeNum(data.numOfItems)
+    setDisplay(data.display)
+  }
+  })
+   console.log(numOfItems)
+  return (
+    <>
+      <SettingsContext.Provider value={{numOfItems,handleChangeNum,setDisplay}}>
+        {props.children}
+      </SettingsContext.Provider>
+    </>
+  );
 }
 
-export default Settings
+export default Settings;
