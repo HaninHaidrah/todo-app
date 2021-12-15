@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import Header from "./Header";
+import Header from "../Header";
 import { Form, Card, Button } from "react-bootstrap";
-import { SettingsContext } from "./contex/contex";
+import { SettingsContext } from "../contex/contex";
 
 export default function Setting() {
   const settings = useContext(SettingsContext);
@@ -16,11 +16,9 @@ export default function Setting() {
       display:e.target.display.checked
     };
     localStorage.setItem("configStting", JSON.stringify(data));
-    console.log("localStorage")
   }
   return (
     <>
-      <Header />
       <Card className="text-center">
         <Card.Header>Edit Setting</Card.Header>
         <Card.Body>

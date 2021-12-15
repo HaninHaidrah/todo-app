@@ -16,10 +16,10 @@ const handleChangeNum=(value)=>{
     setDisplay(data.display)
   }
   })
-   console.log(numOfItems)
+   console.log(numOfItems,"valueecontext")
   return (
     <>
-      <SettingsContext.Provider value={{numOfItems,handleChangeNum,setDisplay}}>
+      <SettingsContext.Provider value={{numOfItems:numOfItems,handleChangeNum:handleChangeNum,setDisplay}}>
         {props.children}
       </SettingsContext.Provider>
     </>

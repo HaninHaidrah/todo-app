@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import useForm from "../../hook/form";
 import Form from "./Form/form";
 import List from "./List/list";
-import Header from "./Header";
 import "./todo.scss";
-
+import { LoginContext } from "../contex/context.login";
+import { When } from "react-if";
+import Login from "../Login";
+import Auth from "../Auth/auth";
 import { v4 as uuid } from "uuid";
 
 const ToDo = () => {
   const [list, setList] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem);
+  const contexType = useContext(LoginContext);
 
   function addItem(item) {
     console.log(item);
@@ -43,27 +46,36 @@ const ToDo = () => {
 
   return (
     <>
-      <Header />
-      <header style={{ width: "1000px", margin: "0 auto" }}>
-        <nav
-          className="bp3-navbar .modifier "
-          style={{ color: "white", backgroundColor: "#4C3F91" }}
-        >
-          <h2
-            style={{
-              marginTop: "5%",
-              padding: "2%",
-            }}
+      <When condition={!contexType.loggedIn}>
+        <Login />
+      </When>
+      <When condition={contexType.loggedIn}>
+        <header style={{ width: "1000px", margin: "0 auto" }}>
+          <nav
+            className="bp3-navbar .modifier "
+            style={{ color: "white", backgroundColor: "#4C3F91" }}
           >
-            To Do List: ({incomplete})
-          </h2>
-        </nav>
-      </header>
-      <div className="container">
-        <Form handleSubmit={handleSubmit} handleChange={handleChange} />
-
-        <List list={list} toggleComplete={toggleComplete} />
-      </div>
+            <h2
+              style={{
+                marginTop: "5%",
+                padding: "2%",
+              }}
+            >
+              To Do List: ({incomplete})
+            </h2>
+          </nav>
+        </header>
+        <div className="container">
+          <Form handleSubmit={handleSubmit} handleChange={handleChange} />
+          <Auth capability="read">
+            <List
+              list={list}
+              toggleComplete={toggleComplete}
+              deleteItem={deleteItem}
+            />
+          </Auth>
+        </div>
+      </When>
     </>
   );
 };

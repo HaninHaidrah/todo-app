@@ -1,34 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import ReactPaginate from "react-paginate";
-import { SettingsContext } from "../contex/contex";
+import { SettingsContext } from "../../contex/contex";
 import "./list.scss";
+import Auth from "../../Auth/auth";
 
 function List(props) {
   const settings = useContext(SettingsContext);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageCount, setPageCount] = useState(1);
   let usersPerPage = settings.numOfItems;
-
-  console.log(settings.numOfItems, settings);
-
   const pagesVisited = pageNumber * usersPerPage;
 
+  useEffect(() => {
+    let page = Math.ceil(props.list.length / settings.numOfItems);
+    setPageCount(page);
+    console.log(settings.numOfItems, "settings.numOfItems");
+  }, [props.list, settings.numOfItems]);
 
   //function to display completedItems:
   function display(status) {
     let arrOfCompletedItem;
-    if(status==true){
-      arrOfCompletedItem=props.list.filter((item)=>item.complete)
-
-    }
-    else{
-      return props.list
+    if (status == true) {
+      arrOfCompletedItem = props.list.filter((item) => item.complete);
+    } else {
+      return props.list;
     }
     return arrOfCompletedItem;
   }
 
-  console.log(display(settings.display) ) 
   const displayUsers = display(settings.display)
     .slice(pagesVisited, pagesVisited + usersPerPage)
     .map((item) => {
@@ -46,20 +46,20 @@ function List(props) {
             <p>
               <small>Difficulty: {item.difficulty}</small>
             </p>
+            <Auth capability="update">
+              <Button onClick={() => props.toggleComplete(item.id)}>
+                Complete: {item.complete.toString()}
+              </Button>
+            </Auth>
 
-            <Button onClick={() => props.toggleComplete(item.id)}>
-              Complete: {item.complete.toString()}
-            </Button>
+            <Auth capability="delete">
+              <Button onClick={() => props.deleteItem(item.id)}>Delete:</Button>
+            </Auth>
           </Card>
         </div>
       );
     });
-  console.log(settings.numOfItems, "settings.numOfItems");
-  useEffect(() => {
-    let page = Math.ceil(props.list.length / settings.numOfItems);
-    setPageCount(page);
-    console.log(page,"page",settings.numOfItems,"settings.numOfItems");
-  }, [props.list]);
+
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
