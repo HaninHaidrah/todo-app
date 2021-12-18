@@ -15,7 +15,6 @@ function List(props) {
   useEffect(() => {
     let page = Math.ceil(props.list.length / settings.numOfItems);
     setPageCount(page);
-    console.log(settings.numOfItems, "settings.numOfItems");
   }, [props.list, settings.numOfItems]);
 
   //function to display completedItems:
@@ -29,7 +28,7 @@ function List(props) {
     return arrOfCompletedItem;
   }
 
-  const displayUsers = display(settings.display)
+  const displayUsers = props.list
     .slice(pagesVisited, pagesVisited + usersPerPage)
     .map((item) => {
       return (
@@ -47,14 +46,14 @@ function List(props) {
               <small>Difficulty: {item.difficulty}</small>
             </p>
             <Auth capability="update">
-              <Button onClick={() => props.toggleComplete(item.id)}>
+              <Button onClick={() => props.toggleComplete(item,item.id)}>
                 Complete: {item.complete.toString()}
               </Button>
             </Auth>
 
             <Auth capability="delete">
               <Button onClick={() => props.deleteItem(item.id)}>Delete:</Button>
-            </Auth>
+             </Auth>
           </Card>
         </div>
       );

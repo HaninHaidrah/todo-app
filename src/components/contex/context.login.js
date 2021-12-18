@@ -1,89 +1,97 @@
 import React, { useEffect, useState } from "react";
+import superagent from "superagent";
+import base64 from "base-64";
 import cookie from "react-cookies";
-import jwt from "jsonwebtoken";
-
-const testUsers = {
-  admin: {
-    password: "password",
-    name: "Administrator",
-    role: "admin",
-    capabilities: ["create", "read", "update", "delete"],
-  },
-  editor: {
-    password: "password",
-    name: "Editor",
-    role: "editor",
-    capabilities: ["read", "update"],
-  },
-  writer: {
-    password: "password",
-    name: "Writer",
-    role: "writer",
-    capabilities: ["create"],
-  },
-};
+import bcrypt from 'bcryptjs';
 
 export const LoginContext = React.createContext();
 
 export default function LoginProvider(props) {
-  let [loggedIn, setloggedIn] = useState(false);
-  let [user, setUser] = useState({ capabilities: [] });
-  let [token, setToken] = useState("");
+  const API = "https://to-do-7.herokuapp.com";
+
+  const [LoggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState({ capabilities: [] });
+  const [token, setToken] = useState("");
+
+  const signUp = async(username, password, role) => {
+    try {
+      // let salt = bcrypt.genSaltSync(10);
+      // let hashedPassword= bcrypt.hashSync(password, salt);
+      // console.log(hashedPassword);
+      const response = await fetch(`${API}/signup`, {
+        method: "POST",
+        headers:new Headers ({
+          Accept: "application/json",
+        }),
+        body: JSON.stringify({
+          "username": username,
+          "password": password,
+          "role": role,
+        }),
+      });
+      const data = await response.json();
+    } catch (err) {}
+  };
+
+  const loginFunction = async (username, password) => {
+    try {
+      const response = await fetch(`${API}/signin`, {
+        method: "POST",
+        headers: new Headers({
+          Authorization: `Basic ${base64.encode(`${username}:${password}`)}`,
+        }),
+      });
+      const data = await response.json();
+
+      validateMyToken(data.token);
+    } catch (err) {}
+  };
+  const logoutFunction = () => {
+    setLoggedIn(false);
+    setUser({});
+    cookie.remove("token");
+  };
+
+  const validateMyToken = async (token) => {
+    try {
+      const response = await fetch(`${API}/sign-in`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      const capability = data.user.capabilities;
+
+      setToken(token);
+      setLoggedIn(true);
+      setUser({ capabilities: capability });
+      cookie.save("token", token);
+    } catch (e) {
+      setLoggedIn(false);
+      setUser({});
+      console.log("error.message");
+    }
+  };
 
   const can = (capability) => {
     return user?.capabilities?.includes(capability);
   };
-
-  const login = (username, password) => {
-    if (testUsers[username]) {
-      const token = jwt.sign(
-        testUsers[username],
-        process.env.REACT_APP_SECRET || "2000"
-      );
-      validateToken(token);
-      console.log(token, "toooooooooken");
-    }
-  };
-
-  const logout = () => {
-    setLoginState(false, null, {});
-  };
-
-  const validateToken = async (token) => {
-    try {
-      // let response= await (await superagent.post('https://houses--safe.herokuapp.com/signin')).set('authorization', `Basic ${base64.encode(`${username}:${password}`)}`)
-      let user = jwt.verify(token, process.env.REACT_APP_SECRET || "2000");
-      console.log(token, "toooooooooken");
-      setLoginState(true, token, user);
-    } catch (e) {
-      setLoginState(false, null, {});
-      console.log("Token Validation Error", e);
-    }
-  };
-
-  const setLoginState = (loggedIn, token, user) => {
-    cookie.save("auth", token);
-    setloggedIn(loggedIn);
-    setToken(token);
-    setUser(user);
-  };
-
   useEffect(() => {
-    const qs = new URLSearchParams(window.location.search);
-    const cookieToken = cookie.load("auth");
-    const token = qs.get("token") || cookieToken || null;
-    validateToken(token);
-  });
+    // check the token
+    const myTokenCookie = cookie.load("token");
+    validateMyToken(myTokenCookie, user.capabilities);
+  }, []);
 
   const state = {
-    loggedIn,
-    login,
-    logout,
-    user,
-    token,
-    can,
+    LoggedIn: LoggedIn,
+    loginFunction: loginFunction,
+    logout: logoutFunction,
+    user: user,
+    can: can,
+    token: token,
+    signUp:signUp
   };
-
   return (
     <LoginContext.Provider value={state}>
       {props.children}

@@ -7,7 +7,6 @@ function Settings(props) {
 
 const handleChangeNum=(value)=>{
     setNum(value)
-    console.log(value,"valuennnnnnnnnn");
 }
   useEffect(()=>{
   let data=JSON.parse(localStorage.getItem('configStting')) 
@@ -16,7 +15,6 @@ const handleChangeNum=(value)=>{
     setDisplay(data.display)
   }
   })
-   console.log(numOfItems,"valueecontext")
   return (
     <>
       <SettingsContext.Provider value={{numOfItems:numOfItems,handleChangeNum:handleChangeNum,setDisplay}}>

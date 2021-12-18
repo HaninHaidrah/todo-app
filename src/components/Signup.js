@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { When } from "react-if";
-import SignUp from "./Signup";
 
 import { LoginContext } from "./contex/context.login.js";
 
@@ -10,6 +9,7 @@ export default function Login(props) {
   const contextType = useContext(LoginContext);
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
+  let [role, setRole] = useState("user");
 
   //  handle form functions :
 
@@ -21,16 +21,20 @@ export default function Login(props) {
     // setUsername(e.target.value);
     setPassword(e.target.value);
   };
+  const handleChangeRole = (e) => {
+    // setUsername(e.target.value);
+    setRole(e.target.value);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    contextType.loginFunction(username, password);
-    console.log("hi");
+    contextType.signUp(username, password, role);
+    console.log("welcome");
   };
   return (
     <>
-      <SignUp />
       <form onSubmit={handleSubmit}>
         <input
+          type="text"
           placeholder="UserName"
           name="username"
           onChange={handleChangeName}
@@ -41,7 +45,8 @@ export default function Login(props) {
           name="password"
           onChange={handleChangePassword}
         />
-        <button type="submit">Login</button>
+        <input placeholder="role" name="role" onChange={handleChangeRole} />
+        <button type="submit">sign up</button>
       </form>
     </>
   );
